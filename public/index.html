@@ -84,6 +84,8 @@
     .todo-item { background: white; border-radius: 10px; padding: 12px 14px; margin-bottom: 8px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
     .todo-item.done { opacity: 0.55; }
     .todo-item.done .t-text { text-decoration: line-through; }
+    .todo-item.overdue { border-left: 3px solid #e55; background: #fff8f8; }
+    .todo-item.overdue .t-due { color: #c33; font-weight: 600; }
  .todo-item .t-text { flex: 1 1 0; min-width: 0; font-size: 0.9rem; cursor: pointer; padding: 2px 4px; border-radius: 4px; border: 1px solid transparent; word-break: break-word; white-space: normal; }
     .todo-item .t-text:hover { border-color: #ccc; background: #f9f9f9; }
     .todo-item .t-text:focus { outline: none; border-color: var(--rose); background: #fff; white-space: normal; word-break: break-word; }
@@ -177,16 +179,14 @@
 
 <!-- HOME -->
 <div class="section active" id="tab-home">
-  <h2>Welcome!</h2>
-  <p>This is your private wedding hub — timeline, vendors, budget, and everything organized in one place.</p>
-  <div class="mt-20">
-    <div class="stats" id="stats"></div>
-    <h3 style="margin-bottom: 12px; color: var(--charcoal);">Quick Links</h3>
-    <div style="display:flex; gap: 10px; flex-wrap: wrap;">
-      <button class="btn" onclick="switchTab('budget')">💰 Budget</button>
-      <button class="btn btn-outline" onclick="switchTab('timeline')">📅 Timeline</button>
-      <button class="btn btn-outline" onclick="switchTab('todo')">✅ To-Do</button>
-    </div>
+  <h2>Your Wedding Hub</h2>
+  <p style="color:#888; margin-bottom:20px;">June 14, 2026 at Nestldown</p>
+  <div id="home-alerts"></div>
+  <div class="stats" id="stats"></div>
+  <div style="display:flex; gap: 10px; flex-wrap: wrap;">
+    <button class="btn" onclick="switchTab('budget')">💰 Budget</button>
+    <button class="btn btn-outline" onclick="switchTab('timeline')">📅 Timeline</button>
+    <button class="btn btn-outline" onclick="switchTab('todo')">✅ To-Do</button>
   </div>
 </div>
 
@@ -200,8 +200,11 @@
 <div class="section" id="tab-todo">
   <h2>To-Do List</h2>
   <div class="filter-bar" id="todo-filters">
-    <button class="active" data-filter="active" onclick="filterTodos('active')">Active</button>
-    <button data-filter="archived" onclick="filterTodos('archived')">Archived</button>
+    <button data-filter="overdue" onclick="filterTodos('overdue')">⚠️ Overdue</button>
+    <button data-filter="week" onclick="filterTodos('week')">📅 This Week</button>
+    <button data-filter="later" onclick="filterTodos('later')">📆 Later</button>
+    <button class="active" data-filter="all" onclick="filterTodos('all')">All</button>
+    <button data-filter="archived" onclick="filterTodos('archived')">🗄 Archived</button>
   </div>
   <div style="margin-bottom:12px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
     <div id="todo-progress" style="font-size:0.85rem; color:#888;"></div>
@@ -305,9 +308,39 @@ function switchTab(tab) {
 async function loadStats() {
   try {
     const stats = await fetchJson('/api/stats');
+
+    // Overdue alert
+    let alertsHtml = '';
+    if (stats.overdue_count > 0) {
+      const overdueList = stats.overdue_tasks.map(t =>
+        `<div style="padding:6px 0; border-bottom:1px solid #f0e0e0; display:flex; justify-content:space-between;">
+          <span>⚠️ ${t.task}</span><span style="color:#c33; font-weight:600;">${t.due}</span>
+        </div>`
+      ).join('');
+      alertsHtml = `
+        <div style="background:#fff8f8; border:1px solid #e55; border-radius:10px; padding:14px; margin-bottom:16px;">
+          <div style="font-weight:700; color:#c33; margin-bottom:8px;">⚠️ ${stats.overdue_count} Overdue Task${stats.overdue_count>1?'s':''}</div>
+          ${overdueList}
+          <button onclick="switchTab('todo'); filterTodos('overdue')" style="margin-top:8px; background:none; border:none; color:#c33; cursor:pointer; font-size:0.85rem; text-decoration:underline; padding:0;">View all →</button>
+        </div>`;
+    } else if (stats.this_week_count > 0) {
+      const weekList = stats.this_week_tasks.map(t =>
+        `<div style="padding:6px 0; border-bottom:1px solid #e0e8e0; display:flex; justify-content:space-between;">
+          <span>📅 ${t.task}</span><span style="color:var(--sage); font-weight:600;">${t.due}</span>
+        </div>`
+      ).join('');
+      alertsHtml = `
+        <div style="background:#f0f7f0; border:1px solid var(--sage); border-radius:10px; padding:14px; margin-bottom:16px;">
+          <div style="font-weight:700; color:var(--sage); margin-bottom:8px;">📅 ${stats.this_week_count} Task${stats.this_week_count>1?'s':''} This Week</div>
+          ${weekList}
+          <button onclick="switchTab('todo'); filterTodos('week')" style="margin-top:8px; background:none; border:none; color:var(--sage); cursor:pointer; font-size:0.85rem; text-decoration:underline; padding:0;">View all →</button>
+        </div>`;
+    }
+    document.getElementById('home-alerts').innerHTML = alertsHtml;
+
     document.getElementById('stats').innerHTML = `
       <div class="stat-card"><div class="val">${stats.todos_done ?? 0}/${stats.todos_total ?? 0}</div><div class="lbl">Tasks Done</div></div>
-      <div class="stat-card"><div class="val">${stats.todos_total - stats.todos_done ?? 0}</div><div class="lbl">Tasks Left</div></div>
+      <div class="stat-card"><div class="val" style="${stats.overdue_count>0?'color:#c33':''}">${stats.overdue_count > 0 ? stats.overdue_count : (stats.todos_total - stats.todos_done ?? 0)}</div><div class="lbl">${stats.overdue_count > 0 ? '⚠️ Overdue' : 'Tasks Left'}</div></div>
     `;
   } catch(e) {
     document.getElementById('stats').innerHTML = '<div class="stat-card"><div class="val">--</div><div class="lbl">Tasks</div></div>';
@@ -329,7 +362,7 @@ async function loadTimeline() {
 }
 
 // ─── TODOS ───────────────────────────────────────────────
-let currentFilter = 'active';
+let currentFilter = 'all';
 
 async function loadTodos() {
   const todos = await fetchJson('/api/todos');
@@ -345,26 +378,42 @@ async function loadTodos() {
 }
 
 function renderTodos(todos) {
+  const today = new Date().toISOString().split('T')[0];
+  const weekFromNow = new Date(Date.now() + 7 * 86400000).toISOString().split('T')[0];
+
   const activeTodos = todos.filter(t => !t.archived);
   const archivedTodos = todos.filter(t => t.archived);
 
-  // Render active todos
-  const filtered = currentFilter === 'active' ? activeTodos.sort((a,b) => (a.due||'').localeCompare(b.due||'')) : [];
+  const isOverdue = t => !t.done && t.due && t.due < today;
+  const isThisWeek = t => !t.done && t.due && t.due >= today && t.due <= weekFromNow;
+  const isLater = t => !t.done && (!t.due || t.due > weekFromNow);
+  const isAllActive = t => !t.done;
+
+  let filtered;
+  if (currentFilter === 'overdue') filtered = activeTodos.filter(isOverdue);
+  else if (currentFilter === 'week') filtered = activeTodos.filter(isThisWeek);
+  else if (currentFilter === 'later') filtered = activeTodos.filter(isLater);
+  else if (currentFilter === 'all') filtered = activeTodos.filter(isAllActive);
+  else filtered = [];
+
+  const byDate = (a,b) => (a.due||'zz').localeCompare(b.due||'zz');
+  filtered.sort(byDate);
+  archivedTodos.sort(byDate);
+
   document.getElementById('todos-list').innerHTML = filtered.map(t => `
-    <div class="todo-item ${t.done ? 'done' : ''}">
-      <input type="checkbox" ${t.done ? 'checked' : ''} onclick="toggleTodo(${t.id}, this.checked)" />
+    <div class="todo-item ${t.done?'done':''} ${isOverdue(t)?'overdue':''}">
+      <input type="checkbox" ${t.done?'checked':''} onclick="toggleTodo(${t.id}, this.checked)" />
       <span class="t-text" contenteditable="true" onblur="updateTodoTask(${t.id}, this.innerText)">${t.task}</span>
-      ${t.due ? `<input type="date" class="t-due" value="${t.due}" onchange="updateTodoDue(${t.id}, this.value)" />` : ''}
+      ${t.due?`<input type="date" class="t-due" value="${t.due}" onchange="updateTodoDue(${t.id}, this.value)" />`:''}
       <button class="delete-btn" onclick="archiveTodo(${t.id})">✕</button>
     </div>
-  `).join('') || (currentFilter === 'active' ? '<p style="color:#bbb; text-align:center; margin-top:20px;">No active tasks. Nice!</p>' : '');
+  `).join('') || `<p style="color:#bbb; text-align:center; margin-top:20px;">${currentFilter==='overdue'?'✅ No overdue tasks — you\'re on track!':currentFilter==='week'?'✅ Nothing due this week':currentFilter==='later'?'✅ Nothing scheduled later':currentFilter==='all'?'✅ All tasks complete!':'No tasks.'}</p>`;
 
-  // Render archived todos
   document.getElementById('archived-list').innerHTML = archivedTodos.map(t => `
     <div class="todo-item done">
       <input type="checkbox" checked onclick="toggleTodo(${t.id}, this.checked)" />
       <span class="t-text" contenteditable="true" onblur="updateTodoTask(${t.id}, this.innerText)">${t.task}</span>
-      ${t.due ? `<input type="date" class="t-due" value="${t.due}" onchange="updateTodoDue(${t.id}, this.value)" />` : ''}
+      ${t.due?`<input type="date" class="t-due" value="${t.due}" onchange="updateTodoDue(${t.id}, this.value)" />`:''}
       <button class="delete-btn" onclick="restoreTodo(${t.id})" title="Restore">↩</button>
       <button class="delete-btn" onclick="deleteTodo(${t.id})" title="Delete forever">✕</button>
     </div>
@@ -379,9 +428,11 @@ function filterTodos(cat) {
 }
 
 async function toggleTodo(id, done) {
+  const payload = {done};
+  if (done) payload.completedAt = new Date().toISOString().split('T')[0];
   await fetch(`/api/todos/${id}`, {
     method: 'PUT', headers: {'Content-Type':'application/json'},
-    body: JSON.stringify({done})
+    body: JSON.stringify(payload)
   });
   loadTodos();
   loadStats();

@@ -4,7 +4,7 @@ Run: python app.py
 """
 import json
 import os
-from datetime import datetime
+from datetime import datetime, timedelta
 from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 
@@ -369,6 +369,10 @@ def get_stats():
     attending = sum(1 for r in rsvps if r.get('attending') == 'yes')
     not_attending = sum(1 for r in rsvps if r.get('attending') == 'no')
     pending = len(guests) - len(rsvps)
+    today = datetime.now().strftime('%Y-%m-%d')
+    week_end = (datetime.now() + timedelta(days=7)).strftime('%Y-%m-%d')
+    overdue = [t for t in todos if not t.get('archived') and not t.get('done') and t.get('due','') and t['due'] < today]
+    this_week = [t for t in todos if not t.get('archived') and not t.get('done') and t.get('due','') and today <= t['due'] <= week_end]
     return jsonify({
         "total_guests": len(guests),
         "attending": attending,
@@ -376,6 +380,10 @@ def get_stats():
         "pending": pending,
         "todos_total": len(todos),
         "todos_done": sum(1 for t in todos if t.get('done')),
+        "overdue_count": len(overdue),
+        "overdue_tasks": overdue[:5],
+        "this_week_count": len(this_week),
+        "this_week_tasks": this_week[:5],
     })
 
 if __name__ == '__main__':
