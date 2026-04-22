@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ellie & David — June 14, 2026</title>
+  <style>
+    :root {
+      --rose: #c47e7e;
+      --sage: #7a9e7e;
+      --gold: #c9a84c;
+      --charcoal: #3a3a3a;
+      --soft: #f5f0eb;
+      --font: 'Georgia', serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: var(--font); background: var(--soft); color: var(--charcoal); padding-bottom: 80px; }
+
+    /* NAV */
+    nav { background: white; border-bottom: 1px solid #e0d8d0; position: sticky; top: 0; z-index: 100; }
+    nav ul { display: flex; list-style: none; overflow-x: auto; padding: 0 12px; }
+    nav li { flex: 0 0 auto; }
+    nav button {
+      background: none; border: none; padding: 14px 14px; font-family: var(--font); font-size: 0.85rem;
+      color: #999; cursor: pointer; border-bottom: 2px solid transparent; white-space: nowrap;
+    }
+    nav button.active { color: var(--rose); border-bottom-color: var(--rose); }
+
+    /* SECTIONS */
+    .section { display: none; padding: 20px 16px; max-width: 700px; margin: 0 auto; }
+    .section.active { display: block; }
+    h2 { color: var(--charcoal); font-size: 1.5rem; margin-bottom: 12px; }
+    h3 { color: var(--charcoal); font-size: 1.1rem; margin: 16px 0 8px; }
+
+    /* COUNTDOWN */
+    .countdown-hero {
+      text-align: center; background: linear-gradient(135deg, #fff8f5, #f5f0eb);
+      padding: 28px 16px 20px; border-bottom: 1px solid #e8e0da; margin-bottom: 4px;
+    }
+    .countdown-hero h1 { font-size: 1.8rem; color: var(--charcoal); margin-bottom: 4px; }
+    .countdown-hero .venue-tag { color: var(--rose); font-size: 0.9rem; letter-spacing: 0.5px; }
+    .countdown-grid { display: flex; justify-content: center; gap: 16px; margin-top: 18px; flex-wrap: wrap; }
+    .countdown-item { text-align: center; }
+    .countdown-item .num {
+      display: block; font-size: 2rem; font-weight: bold; color: var(--charcoal);
+      background: white; border-radius: 10px; padding: 8px 16px; min-width: 64px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    }
+    .countdown-item label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; color: #999; margin-top: 4px; display: block; }
+
+    /* BUTTONS */
+    .btn { background: var(--rose); color: white; border: none; padding: 10px 20px; border-radius: 24px; font-family: var(--font); font-size: 0.85rem; cursor: pointer; }
+    .btn-outline { background: white; color: var(--rose); border: 1.5px solid var(--rose); padding: 9px 19px; }
+    .btn-sm { padding: 6px 14px; font-size: 0.8rem; }
+    .btn-gold { background: var(--gold); color: white; }
+
+    /* FORM */
+    .form-group { margin-bottom: 12px; }
+    .form-group label { display: block; font-size: 0.8rem; color: #888; margin-bottom: 4px; }
+    .form-group input, .form-group textarea, .form-group select {
+      width: 100%; padding: 9px 12px; border: 1.5px solid #e0d8d0; border-radius: 8px;
+      font-family: var(--font); font-size: 0.9rem; background: white; color: var(--charcoal);
+    }
+    .form-group input:focus, .form-group textarea:focus, .form-group select:focus { outline: none; border-color: var(--rose); }
+
+    /* STATS */
+    .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+    .stat-card { background: white; border-radius: 10px; padding: 14px; text-align: center; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+    .stat-card .val { font-size: 1.6rem; font-weight: bold; color: var(--charcoal); }
+    .stat-card .lbl { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.5px; color: #999; margin-top: 2px; }
+
+    /* FILTER BAR */
+    .filter-bar { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px; }
+    .filter-bar button { background: var(--soft); border: none; padding: 6px 14px; border-radius: 20px; cursor: pointer; font-size: 0.8rem; font-family: var(--font); color: #777; }
+    .filter-bar button.active, .filter-bar button:hover { background: var(--sage); color: white; }
+
+    /* TIMELINE */
+    .timeline-item { background: white; border-radius: 10px; padding: 14px 16px; margin-bottom: 10px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); border-left: 3px solid var(--rose); }
+    .timeline-item .t-time { font-size: 0.75rem; font-weight: bold; color: var(--rose); text-transform: uppercase; letter-spacing: 0.5px; }
+    .timeline-item .t-event { font-size: 1rem; font-weight: bold; color: var(--charcoal); margin: 4px 0; }
+    .timeline-item .t-note { font-size: 0.85rem; color: #777; }
+
+    /* TODOS */
+    .todo-item { background: white; border-radius: 10px; padding: 12px 14px; margin-bottom: 8px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .todo-item.done { opacity: 0.55; }
+    .todo-item.done .t-text { text-decoration: line-through; }
+ .todo-item .t-text { flex: 1 1 0; min-width: 0; font-size: 0.9rem; cursor: pointer; padding: 2px 4px; border-radius: 4px; border: 1px solid transparent; word-break: break-word; white-space: normal; }
+    .todo-item .t-text:hover { border-color: #ccc; background: #f9f9f9; }
+    .todo-item .t-text:focus { outline: none; border-color: var(--rose); background: #fff; white-space: normal; word-break: break-word; }
+    .todo-item .t-cat { font-size: 0.7rem; padding: 2px 8px; border-radius: 12px; background: var(--soft); color: #888; text-transform: uppercase; letter-spacing: 0.3px; }
+    .todo-item .t-due { font-size: 0.75rem; color: #999; cursor: pointer; padding: 2px 4px; border-radius: 4px; border: 1px solid transparent; }
+    .todo-item .t-due:hover { border-color: #ccc; background: #f9f9f9; }
+    .todo-item input.t-due { font-size: 0.75rem; color: #999; padding: 2px 4px; border-radius: 4px; border: 1px solid #ccc; background: #fff; font-family: var(--font); width: 110px; cursor: pointer; }
+    .todo-item input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--sage); cursor: pointer; }
+    .delete-btn { background: none; border: none; color: #ccc; cursor: pointer; font-size: 1rem; padding: 4px; }
+
+    /* VENDOR GRID */
+    .vendor-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+    .vendor-card { background: white; border-radius: 10px; padding: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+    .vendor-card h4 { color: var(--charcoal); font-size: 1rem; }
+    .vendor-card .v-type { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; color: var(--rose); }
+    .vendor-card .v-time { font-size: 0.85rem; color: var(--sage); margin-top: 4px; }
+    .vendor-card .v-contact { font-size: 0.8rem; color: #666; margin-top: 4px; }
+    .vendor-card .v-contact a { color: var(--rose); text-decoration: none; }
+    .vendor-card .v-note { font-size: 0.8rem; color: #999; margin-top: 6px; font-style: italic; background: var(--soft); padding: 6px 8px; border-radius: 6px; }
+    .vendor-card textarea { width: 100%; margin-top: 8px; padding: 6px 8px; border: 1px solid #e0d8d0; border-radius: 6px; font-family: var(--font); font-size: 0.8rem; resize: vertical; min-height: 50px; }
+    .vendor-card .save-note { font-size: 0.75rem; color: var(--sage); border: none; background: var(--soft); padding: 4px 10px; border-radius: 12px; cursor: pointer; margin-top: 4px; }
+
+    /* BUDGET */
+    .budget-summary { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+    .budget-card { background: white; border-radius: 10px; padding: 14px; text-align: center; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+    .budget-card .b-val { font-size: 1.3rem; font-weight: bold; }
+    .budget-card .b-lbl { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.5px; color: #999; margin-top: 2px; }
+    .budget-card.tips .b-val { color: var(--gold); }
+    .budget-card.paid .b-val { color: var(--sage); }
+    .budget-item { background: white; border-radius: 10px; padding: 12px 14px; margin-bottom: 8px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); display: flex; align-items: center; gap: 10px; }
+    .budget-item.tip-item { border-left: 3px solid var(--gold); }
+    .budget-item.tip-item.no-tip { border-left: 3px solid #ddd; opacity: 0.6; }
+    .budget-item .b-desc { flex: 1; }
+    .budget-item .b-desc .desc-text { font-size: 0.9rem; }
+    .budget-item .b-desc .desc-cat { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.3px; color: #bbb; }
+    .budget-item .b-amt { font-size: 0.95rem; font-weight: bold; color: var(--charcoal); min-width: 60px; text-align: right; }
+    .budget-item .b-amt-input { width: 80px; padding: 4px 8px; border: 1px solid #e0d8d0; border-radius: 6px; font-family: var(--font); font-size: 0.9rem; text-align: right; }
+    .budget-item input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--sage); cursor: pointer; }
+    .budget-item .no-tip-label { font-size: 0.75rem; color: #bbb; font-style: italic; }
+
+    /* UTILITIES */
+    .mt-20 { margin-top: 20px; }
+    .text-center { text-align: center; }
+    .success-msg { background: #d4edda; color: #155724; padding: 10px 16px; border-radius: 6px; margin-top: 10px; font-size: 0.9rem; display: none; }
+    .category-venue { color: #8b6fbf; }
+    .category-vendors { color: #e07b7b; }
+    .category-guests { color: #5b9bd5; }
+    .category-payments { color: var(--gold); }
+    .category-logistics { color: #6baa6b; }
+    .category-attire { color: #d4a0c8; }
+    .category-events { color: var(--rose); }
+    .category-catering { color: #c47e7e; }
+    .category-transportation { color: #7eb8d4; }
+    .category-beauty { color: #d4a0c8; }
+    .category-decor { color: #a8c97e; }
+    .category-legal { color: #888; }
+    .category-accessibility { color: #6baad4; }
+    .category-other { color: #aaa; }
+
+    /* MODAL */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 200; display: none; align-items: center; justify-content: center; padding: 16px; }
+    .modal-overlay.open { display: flex; }
+    .modal { background: white; border-radius: 14px; padding: 24px; width: 100%; max-width: 400px; }
+    .modal h3 { margin-bottom: 16px; }
+    .modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 16px; }
+  </style>
+</head>
+<body>
+
+<!-- COUNTDOWN HERO -->
+<div class="countdown-hero">
+  <h1>Ellie & David</h1>
+  <div class="venue-tag">June 14, 2026 — Nestldown</div>
+  <div class="countdown-grid">
+    <div class="countdown-item"><span class="num" id="days">--</span><label>Days</label></div>
+    <div class="countdown-item"><span class="num" id="hours">--</span><label>Hours</label></div>
+    <div class="countdown-item"><span class="num" id="mins">--</span><label>Mins</label></div>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <ul>
+    <li><button class="active" data-tab="home">Home</button></li>
+    <li><button data-tab="timeline">Timeline</button></li>
+    <li><button data-tab="todo">Todo</button></li>
+    <li><button data-tab="vendors">Vendors</button></li>
+    <li><button data-tab="budget">Budget</button></li>
+  </ul>
+</nav>
+
+<!-- HOME -->
+<div class="section active" id="tab-home">
+  <h2>Welcome!</h2>
+  <p>This is your private wedding hub — timeline, vendors, budget, and everything organized in one place.</p>
+  <div class="mt-20">
+    <div class="stats" id="stats"></div>
+    <h3 style="margin-bottom: 12px; color: var(--charcoal);">Quick Links</h3>
+    <div style="display:flex; gap: 10px; flex-wrap: wrap;">
+      <button class="btn" onclick="switchTab('budget')">💰 Budget</button>
+      <button class="btn btn-outline" onclick="switchTab('timeline')">📅 Timeline</button>
+      <button class="btn btn-outline" onclick="switchTab('todo')">✅ To-Do</button>
+    </div>
+  </div>
+</div>
+
+<!-- TIMELINE -->
+<div class="section" id="tab-timeline">
+  <h2>Wedding Day Timeline</h2>
+  <div id="timeline-list"></div>
+</div>
+
+<!-- TODOS -->
+<div class="section" id="tab-todo">
+  <h2>To-Do List</h2>
+  <div class="filter-bar" id="todo-filters">
+    <button class="active" data-filter="active" onclick="filterTodos('active')">Active</button>
+    <button data-filter="archived" onclick="filterTodos('archived')">Archived</button>
+  </div>
+  <div style="margin-bottom:12px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+    <div id="todo-progress" style="font-size:0.85rem; color:#888;"></div>
+    <button class="btn btn-sm" onclick="openTodoModal()">+ Add Task</button>
+  </div>
+  <div id="todos-list"></div>
+  <div id="archived-section" style="display:none; margin-top:24px;">
+    <h3 style="color:#999; font-size:1rem; margin-bottom:12px;">Archived</h3>
+    <div id="archived-list"></div>
+  </div>
+</div>
+
+<!-- VENDORS -->
+<div class="section" id="tab-vendors">
+  <h2>Vendors</h2>
+  <p style="font-size:0.85rem; color:#999; margin-bottom:16px;">Tap a card to add private notes about each vendor.</p>
+  <div class="vendor-grid" id="vendor-grid"></div>
+</div>
+
+<!-- BUDGET -->
+<div class="section" id="tab-budget">
+  <h2>Budget Tracker</h2>
+  <div class="budget-summary">
+    <div class="budget-card">
+      <div class="b-val" id="budget-total">$0</div>
+      <div class="b-lbl">Total Budget</div>
+    </div>
+    <div class="budget-card tips">
+      <div class="b-val" id="budget-tips">$0</div>
+      <div class="b-lbl">Tips</div>
+    </div>
+    <div class="budget-card paid">
+      <div class="b-val" id="budget-paid">$0</div>
+      <div class="b-lbl">Paid</div>
+    </div>
+  </div>
+  <div id="budget-list"></div>
+</div>
+
+<!-- TODO MODAL -->
+<div class="modal-overlay" id="todo-modal">
+  <div class="modal">
+    <h3>Add Task</h3>
+    <div class="form-group"><label>Task</label><input type="text" id="todo-input" placeholder="What needs to be done?" /></div>
+    <div class="form-group"><label>Due Date (optional)</label><input type="date" id="todo-due" /></div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeTodoModal()">Cancel</button>
+      <button class="btn" onclick="submitTodo()">Add</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const API = '';
+
+// ─── COUNTDOWN ───────────────────────────────────────────
+function updateCountdown() {
+  const wedding = new Date('June 14, 2026 16:00:00').getTime();
+  const now = new Date().getTime();
+  const diff = wedding - now;
+  if (diff <= 0) {
+    document.getElementById('days').textContent = '0';
+    document.getElementById('hours').textContent = '0';
+    document.getElementById('mins').textContent = '0';
+    return;
+  }
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+  document.getElementById('days').textContent = days;
+  document.getElementById('hours').textContent = hours;
+  document.getElementById('mins').textContent = mins;
+}
+setInterval(updateCountdown, 30000);
+updateCountdown();
+
+// ─── FETCH ───────────────────────────────────────────────
+async function fetchJson(url) {
+  const r = await fetch(API + url);
+  return r.json();
+}
+
+// ─── TABS ────────────────────────────────────────────────
+document.querySelectorAll('nav button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+    if (btn.dataset.tab === 'timeline') loadTimeline();
+    if (btn.dataset.tab === 'todo') loadTodos();
+    if (btn.dataset.tab === 'vendors') loadVendors();
+    if (btn.dataset.tab === 'budget') loadBudget();
+  });
+});
+function switchTab(tab) {
+  document.querySelector(`[data-tab="${tab}"]`).click();
+}
+
+// ─── HOME STATS ──────────────────────────────────────────
+async function loadStats() {
+  try {
+    const stats = await fetchJson('/api/stats');
+    document.getElementById('stats').innerHTML = `
+      <div class="stat-card"><div class="val">${stats.todos_done ?? 0}/${stats.todos_total ?? 0}</div><div class="lbl">Tasks Done</div></div>
+      <div class="stat-card"><div class="val">${stats.todos_total - stats.todos_done ?? 0}</div><div class="lbl">Tasks Left</div></div>
+    `;
+  } catch(e) {
+    document.getElementById('stats').innerHTML = '<div class="stat-card"><div class="val">--</div><div class="lbl">Tasks</div></div>';
+  }
+}
+loadStats();
+
+// ─── TIMELINE ────────────────────────────────────────────
+async function loadTimeline() {
+  const data = await fetchJson('/api/timeline');
+  document.getElementById('timeline-list').innerHTML = data.map(item => `
+    <div class="timeline-item">
+      <div class="t-time">${item.time}</div>
+      <div class="t-event">${item.event}</div>
+      ${item.location && item.location !== '—' ? `<div class="t-note">📍 ${item.location}</div>` : ''}
+      ${item.note ? `<div class="t-note">${item.note}</div>` : ''}
+    </div>
+  `).join('');
+}
+
+// ─── TODOS ───────────────────────────────────────────────
+let currentFilter = 'active';
+
+async function loadTodos() {
+  const todos = await fetchJson('/api/todos');
+  const active = todos.filter(t => !t.archived);
+  const archived = todos.filter(t => t.archived);
+  const done = active.filter(t => t.done).length;
+  document.getElementById('todo-progress').textContent = `${done}/${active.length} tasks complete`;
+
+  // Show archived section only when viewing archived filter
+  document.getElementById('archived-section').style.display = currentFilter === 'archived' ? 'block' : 'none';
+
+  renderTodos(todos);
+}
+
+function renderTodos(todos) {
+  const activeTodos = todos.filter(t => !t.archived);
+  const archivedTodos = todos.filter(t => t.archived);
+
+  // Render active todos
+  const filtered = currentFilter === 'active' ? activeTodos.sort((a,b) => (a.due||'').localeCompare(b.due||'')) : [];
+  document.getElementById('todos-list').innerHTML = filtered.map(t => `
+    <div class="todo-item ${t.done ? 'done' : ''}">
+      <input type="checkbox" ${t.done ? 'checked' : ''} onclick="toggleTodo(${t.id}, this.checked)" />
+      <span class="t-text" contenteditable="true" onblur="updateTodoTask(${t.id}, this.innerText)">${t.task}</span>
+      ${t.due ? `<input type="date" class="t-due" value="${t.due}" onchange="updateTodoDue(${t.id}, this.value)" />` : ''}
+      <button class="delete-btn" onclick="archiveTodo(${t.id})">✕</button>
+    </div>
+  `).join('') || (currentFilter === 'active' ? '<p style="color:#bbb; text-align:center; margin-top:20px;">No active tasks. Nice!</p>' : '');
+
+  // Render archived todos
+  document.getElementById('archived-list').innerHTML = archivedTodos.map(t => `
+    <div class="todo-item done">
+      <input type="checkbox" checked onclick="toggleTodo(${t.id}, this.checked)" />
+      <span class="t-text" contenteditable="true" onblur="updateTodoTask(${t.id}, this.innerText)">${t.task}</span>
+      ${t.due ? `<input type="date" class="t-due" value="${t.due}" onchange="updateTodoDue(${t.id}, this.value)" />` : ''}
+      <button class="delete-btn" onclick="restoreTodo(${t.id})" title="Restore">↩</button>
+      <button class="delete-btn" onclick="deleteTodo(${t.id})" title="Delete forever">✕</button>
+    </div>
+  `).join('') || '<p style="color:#bbb; font-size:0.85rem; text-align:center;">No archived tasks.</p>';
+}
+
+function filterTodos(cat) {
+  currentFilter = cat;
+  document.querySelectorAll('#todo-filters button').forEach(b => b.classList.remove('active'));
+  document.querySelector(`[data-filter="${cat}"]`).classList.add('active');
+  loadTodos();
+}
+
+async function toggleTodo(id, done) {
+  await fetch(`/api/todos/${id}`, {
+    method: 'PUT', headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({done})
+  });
+  loadTodos();
+  loadStats();
+}
+
+async function updateTodoDue(id, due) {
+  await fetch(`/api/todos/${id}`, {
+    method: 'PUT', headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({due})
+  });
+  loadTodos();
+  loadStats();
+}
+
+async function updateTodoTask(id, task) {
+  await fetch(`/api/todos/${id}`, {
+    method: 'PUT', headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({task})
+  });
+  loadTodos();
+}
+
+async function archiveTodo(id) {
+  await fetch(`/api/todos/${id}/archive`, {method: 'PUT'});
+  loadTodos();
+  loadStats();
+}
+
+async function restoreTodo(id) {
+  await fetch(`/api/todos/${id}/restore`, {method: 'PUT'});
+  loadTodos();
+  loadStats();
+}
+
+async function deleteTodo(id) {
+  if (!confirm('Permanently delete this task?')) return;
+  await fetch(`/api/todos/${id}`, {method: 'DELETE'});
+  loadTodos();
+  loadStats();
+}
+
+function openTodoModal() {
+  document.getElementById('todo-modal').classList.add('open');
+  document.getElementById('todo-input').value = '';
+  document.getElementById('todo-due').value = '';
+  document.getElementById('todo-input').focus();
+}
+
+function closeTodoModal() {
+  document.getElementById('todo-modal').classList.remove('open');
+}
+
+async function submitTodo() {
+  const task = document.getElementById('todo-input').value.trim();
+  const due = document.getElementById('todo-due').value;
+  if (!task) return;
+  await fetch('/api/todos', {
+    method: 'POST', headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({task, due})
+  });
+  closeTodoModal();
+  loadTodos();
+  loadStats();
+}
+
+// ─── VENDORS ─────────────────────────────────────────────
+let vendorNotes = {};
+
+async function loadVendors() {
+  const vendors = await fetchJson('/api/vendors');
+  document.getElementById('vendor-grid').innerHTML = vendors.map((v, i) => `
+    <div class="vendor-card">
+      <div class="v-type">${v.type}</div>
+      <h4>${v.name}</h4>
+      <div class="v-time">⏰ ${v.time}</div>
+      ${v.phone ? `<div class="v-contact">📞 <a href="tel:${v.phone}">${v.phone}</a></div>` : ''}
+      ${v.email ? `<div class="v-contact">✉️ <a href="mailto:${v.email}">${v.email}</a></div>` : ''}
+      ${v.note ? `<div class="v-note">📝 ${v.note}</div>` : ''}
+      <textarea placeholder="Add private notes..." id="vnote-${i}" oninput="vendorNotes[${i}] = this.value">${v.note || ''}</textarea>
+      <button class="save-note" onclick="saveVendorNote(${i})">Save note</button>
+    </div>
+  `).join('');
+}
+
+async function saveVendorNote(idx) {
+  const note = vendorNotes[idx] || '';
+  await fetch(`/api/vendors/${idx}`, {
+    method: 'PUT', headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({note})
+  });
+  loadVendors();
+}
+
+// ─── BUDGET ──────────────────────────────────────────────
+async function loadBudget() {
+  const data = await fetchJson('/api/budget');
+  const items = data.items || [];
+  const tips = items.filter(i => i.is_tip);
+  const nonTips = items.filter(i => !i.is_tip);
+  const total = items.reduce((s, i) => s + (i.amount || 0), 0);
+  const totalTips = tips.reduce((s, i) => s + (i.amount || 0), 0);
+  const paid = items.filter(i => i.paid).reduce((s, i) => s + (i.amount || 0), 0);
+  document.getElementById('budget-total').textContent = '$' + total.toLocaleString();
+  document.getElementById('budget-tips').textContent = '$' + totalTips.toLocaleString();
+  document.getElementById('budget-paid').textContent = '$' + paid.toLocaleString();
+
+  const cats = ['venue','catering','photography','videography','floral','dj','beauty','officiant','cake','transportation','rental','attire','decor','flowers','other'];
+  const catLabels = {venue:'🏛 Venue',catering:'🍽 Catering',photography:'📷 Photography',videography:'🎥 Videography',floral:'💐 Floral',dj:'🎧 DJ',beauty:'💄 Hair & Makeup',officiant:'💒 Officiant',cake:'🎂 Cake & Desserts',transportation:'🚐 Shuttles',rental:'🪑 Tabletop Rental',attire:'👗 Attire & Rings',decor:'✨ Decor',flowers:'💐 Flowers',other:'📦 Other'};
+
+  document.getElementById('budget-list').innerHTML = cats.map(cat => {
+    const catItems = items.filter(i => i.category === cat);
+    if (!catItems.length) return '';
+    return `
+      <h3>${catLabels[cat] || cat}</h3>
+      ${catItems.map(item => `
+        <div class="budget-item ${item.is_tip ? 'tip-item' : ''} ${item.is_tip && item.amount === 0 ? 'no-tip' : ''}">
+          <input type="checkbox" ${item.paid ? 'checked' : ''} onclick="toggleBudgetItem(${item.id}, this.checked)" />
+          <div class="b-desc">
+            <div class="desc-text">${item.description}</div>
+            ${item.due ? `<div class="desc-cat">Due: ${item.due}</div>` : ''}
+          </div>
+          ${item.is_tip && item.amount === 0
+            ? '<span class="no-tip-label">No tip</span>'
+            : `<input class="b-amt-input" type="number" value="${item.amount || ''}" placeholder="$0" onchange="updateBudgetAmt(${item.id}, this.value)" />`
+          }
+        </div>
+      `).join('')}
+    `;
+  }).join('');
+}
+
+async function toggleBudgetItem(id, paid) {
+  const data = await fetchJson('/api/budget');
+  const item = data.items.find(i => i.id === id);
+  if (item) {
+    item.paid = paid;
+    await fetch(`/api/budget/items/${id}`, {
+      method: 'PUT', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({paid})
+    });
+    loadBudget();
+  }
+}
+
+async function updateBudgetAmt(id, amount) {
+  const data = await fetchJson('/api/budget');
+  const item = data.items.find(i => i.id === id);
+  if (item) {
+    item.amount = parseFloat(amount) || 0;
+    await fetch(`/api/budget/items/${id}`, {
+      method: 'PUT', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({amount: item.amount})
+    });
+    loadBudget();
+  }
+}
+
+// ─── INIT ────────────────────────────────────────────────
+loadStats();
+</script>
+</body>
+</html>

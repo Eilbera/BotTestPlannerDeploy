@@ -1,0 +1,209 @@
+[
+  {
+    "id": 1,
+    "task": "Mail invitations",
+    "category": "Invitations",
+    "done": true,
+    "due": "2026-04-20",
+    "archived": true
+  },
+  {
+    "id": 2,
+    "task": "Finalize venue contract",
+    "category": "Venue",
+    "done": true,
+    "due": "2026-04-25",
+    "archived": true
+  },
+  {
+    "id": 3,
+    "task": "Complete wedding registry",
+    "category": "Registry",
+    "done": true,
+    "due": "2026-04-30",
+    "archived": true
+  },
+  {
+    "id": 4,
+    "task": "Buy Ellie ring",
+    "category": "Registry",
+    "done": true,
+    "due": "2026-04-30",
+    "archived": true
+  },
+  {
+    "id": 5,
+    "task": "Confirm guest count with caterer",
+    "category": "Catering",
+    "done": false,
+    "due": "2026-05-18"
+  },
+  {
+    "id": 6,
+    "task": "Share shot list with photographer",
+    "category": "Photography",
+    "done": true,
+    "due": "2026-05-10",
+    "archived": true
+  },
+  {
+    "id": 7,
+    "task": "Honeymoon fits",
+    "category": "Honeymoon",
+    "done": false,
+    "due": "2026-04-23"
+  },
+  {
+    "id": 8,
+    "task": "Rehearsal lunch outfits for David and Ellie",
+    "category": "Rehearsal",
+    "done": false,
+    "due": "2026-05-16"
+  },
+  {
+    "id": 9,
+    "task": "Rehearsal meal",
+    "category": "Rehearsal",
+    "done": false,
+    "due": "2026-05-27"
+  },
+  {
+    "id": 10,
+    "task": "Exit item for people",
+    "category": "Ceremony",
+    "done": true,
+    "due": "2026-04-22",
+    "archived": true
+  },
+  {
+    "id": 11,
+    "task": "Final dress fitting",
+    "category": "Attire",
+    "done": true,
+    "due": "2026-05-15",
+    "archived": true
+  },
+  {
+    "id": 12,
+    "task": "Figure out music",
+    "category": "Music",
+    "done": false,
+    "due": "2026-04-21"
+  },
+  {
+    "id": 13,
+    "task": "First dance lesson schedule",
+    "category": "Dance",
+    "done": false,
+    "due": "2026-04-21"
+  },
+  {
+    "id": 14,
+    "task": "Group dance schedule",
+    "category": "Dance",
+    "done": false,
+    "due": "2026-04-21"
+  },
+  {
+    "id": 15,
+    "task": "Seating chart order",
+    "category": "Seating",
+    "done": false,
+    "due": "2026-04-21"
+  },
+  {
+    "id": 16,
+    "task": "Bring After the tone, yalekhta cotton",
+    "category": "Music",
+    "done": false,
+    "due": "2026-06-13"
+  },
+  {
+    "id": 17,
+    "task": "Seating chart",
+    "category": "Seating",
+    "done": false,
+    "due": "2026-05-20",
+    "archived": true
+  },
+  {
+    "id": 18,
+    "task": "Confirm floral order",
+    "category": "Flowers",
+    "done": true,
+    "due": "2026-04-21",
+    "archived": true
+  },
+  {
+    "id": 19,
+    "task": "Cake flowers confirm with boosters",
+    "category": "Cake",
+    "done": true,
+    "due": "2026-04-21",
+    "archived": true
+  },
+  {
+    "id": 20,
+    "task": "Love letter write",
+    "category": "Notes",
+    "done": false,
+    "due": "2026-06-07"
+  },
+  {
+    "id": 21,
+    "task": "Bring rings, license, cup, knife",
+    "category": "Logistics",
+    "done": false,
+    "due": "2026-06-13"
+  },
+  {
+    "id": 22,
+    "task": "Exit item",
+    "category": "Ceremony",
+    "done": false,
+    "due": "2026-06-14",
+    "archived": true
+  },
+  {
+    "id": 23,
+    "task": "David toast?",
+    "archived": false,
+    "done": false,
+    "due": "2026-04-24"
+  },
+  {
+    "id": 24,
+    "task": "Returning vendors",
+    "archived": false,
+    "done": false,
+    "due": "2026-04-30"
+  },
+  {
+    "id": 25,
+    "task": "Entry songs",
+    "archived": true,
+    "done": true,
+    "due": "2026-04-21"
+  },
+  {
+    "id": 26,
+    "task": "Welcome sign",
+    "archived": false,
+    "done": false,
+    "due": "2026-04-24"
+  },
+  {
+    "id": 27,
+    "task": "Table numbers",
+    "archived": false,
+    "done": false,
+    "due": "2026-04-29"
+  },
+  {
+    "id": 28,
+    "task": "Hutch decor",
+    "archived": true,
+    "done": true,
+    "due": "2026-04-30"
+  }
+]

@@ -1,0 +1,293 @@
+{
+  "total": 0,
+  "items": [
+    {
+      "id": 1,
+      "category": "venue",
+      "description": "Nestldown venue deposit",
+      "amount": 0,
+      "paid": false,
+      "due": "2026-02-14",
+      "is_tip": false
+    },
+    {
+      "id": 2,
+      "category": "venue",
+      "description": "Nestldown final balance",
+      "amount": 28000,
+      "paid": true,
+      "due": "2026-06-01",
+      "is_tip": false
+    },
+    {
+      "id": 3,
+      "category": "catering",
+      "description": "Catering",
+      "amount": 24000,
+      "paid": false,
+      "due": "",
+      "is_tip": false
+    },
+    {
+      "id": 4,
+      "category": "catering",
+      "description": "Catering tip (optional)",
+      "amount": 0,
+      "paid": false,
+      "due": "",
+      "is_tip": true
+    },
+    {
+      "id": 5,
+      "category": "photography",
+      "description": "Danny Dong Photography",
+      "amount": 6200,
+      "paid": false,
+      "due": "",
+      "is_tip": false
+    },
+    {
+      "id": 6,
+      "category": "photography",
+      "description": "Photography tip",
+      "amount": 0,
+      "paid": false,
+      "due": "",
+      "is_tip": true
+    },
+    {
+      "id": 7,
+      "category": "videography",
+      "description": "AVR Films",
+      "amount": 7000,
+      "paid": false,
+      "due": "",
+      "is_tip": false
+    },
+    {
+      "id": 8,
+      "category": "videography",
+      "description": "Videography tip",
+      "amount": 0,
+      "paid": false,
+      "due": "",
+      "is_tip": true
+    },
+    {
+      "id": 9,
+      "category": "floral",
+      "description": "Bloomsters Floral",
+      "amount": 4500,
+      "paid": false,
+      "due": "",
+      "is_tip": false
+    },
+    {
+      "id": 10,
+      "category": "floral",
+      "description": "Floral tip",
+      "amount": 0,
+      "paid": false,
+      "due": "",
+      "is_tip": true
+    },
+    {
+      "id": 11,
+      "category": "dj",
+      "description": "AVL Entertainment DJ",
+      "amount": 1800,
+      "paid": false,
+      "due": "",
+      "is_tip": false
+    },
+    {
+      "id": 12,
+      "category": "dj",
+      "description": "DJ tip (optional)",
+      "amount": 0,
+      "paid": false,
+      "due": "",
+      "is_tip": true
+    },
+    {
+      "id": 13,
+      "category": "beauty",
+      "description": "Foxy Faces (Hair & Makeup)",
+      "amount": 0,
+      "paid": false,
+      "due": "",
+      "is_tip": false
+    },
+    {
+      "id": 14,
+      "category": "beauty",
+      "description": "Hair & Makeup tip \u2014 $150 \u00d7 3 stylists = $450",
+      "amount": 450,
+      "paid": false,
+      "due": "",
+      "is_tip": true
+    },
+    {
+      "id": 15,
+      "category": "officiant",
+      "description": "Howard Steiermann (Officiant)",
+      "amount": 1200,
+      "paid": false,
+      "due": "",
+      "is_tip": false
+    },
+    {
+      "id": 16,
+      "category": "officiant",
+      "description": "Officiant tip (optional)",
+      "amount": 0,
+      "paid": false,
+      "due": "",
+      "is_tip": true
+    },
+    {
+      "id": 17,
+      "category": "cake",
+      "description": "Natasha's Treats (Cake & Desserts)",
+      "amount": 800,
+      "paid": false,
+      "due": "",
+      "is_tip": false
+    },
+    {
+      "id": 18,
+      "category": "cake",
+      "description": "Cake & Desserts tip (optional)",
+      "amount": 0,
+      "paid": false,
+      "due": "",
+      "is_tip": true
+    },
+    {
+      "id": 19,
+      "category": "transportation",
+      "description": "Sal's Shuttles",
+      "amount": 1000,
+      "paid": false,
+      "due": "",
+      "is_tip": false
+    },
+    {
+      "id": 20,
+      "category": "transportation",
+      "description": "Shuttle tip \u2014 $50 (15% gratuity already included in contract)",
+      "amount": 50,
+      "paid": false,
+      "due": "",
+      "is_tip": true
+    },
+    {
+      "id": 21,
+      "category": "rental",
+      "description": "Danny Thomas Tabletop Rental",
+      "amount": 500,
+      "paid": false,
+      "due": "",
+      "is_tip": false
+    },
+    {
+      "id": 22,
+      "category": "rental",
+      "description": "Rental tip (optional)",
+      "amount": 0,
+      "paid": false,
+      "due": "",
+      "is_tip": true
+    },
+    {
+      "id": 23,
+      "category": "attire",
+      "description": "Ellie's dress",
+      "amount": 4200,
+      "paid": false,
+      "due": "",
+      "is_tip": false
+    },
+    {
+      "id": 24,
+      "category": "attire",
+      "description": "David's suit/outfit",
+      "amount": 8000,
+      "paid": false,
+      "due": "",
+      "is_tip": false
+    },
+    {
+      "id": 25,
+      "category": "attire",
+      "description": "Wedding bands",
+      "amount": 10000,
+      "paid": false,
+      "due": "2026-05-20",
+      "is_tip": false
+    },
+    {
+      "id": 26,
+      "category": "attire",
+      "description": "Rehearsal dinner outfits",
+      "amount": 400,
+      "paid": false,
+      "due": "2026-05-15",
+      "is_tip": false
+    },
+    {
+      "id": 27,
+      "category": "attire",
+      "description": "Getting ready pajamas",
+      "amount": 200,
+      "paid": false,
+      "due": "2026-05-20",
+      "is_tip": false
+    },
+    {
+      "id": 28,
+      "category": "decor",
+      "description": "Exit items (bubbles, lights)",
+      "amount": 400,
+      "paid": false,
+      "due": "2026-05-15",
+      "is_tip": false
+    },
+    {
+      "id": 29,
+      "category": "flowers",
+      "description": "Bridal bouquet / Flowers",
+      "amount": 0,
+      "paid": false,
+      "due": "",
+      "is_tip": false
+    },
+    {
+      "id": 30,
+      "category": "other",
+      "description": "Marriage license",
+      "amount": 0,
+      "paid": false,
+      "due": "2026-06-01",
+      "is_tip": false
+    },
+    {
+      "id": 31,
+      "category": "other",
+      "description": "Wedding insurance",
+      "amount": 0,
+      "paid": false,
+      "due": "2026-02-14",
+      "is_tip": false
+    },
+    {
+      "id": 32,
+      "category": "other",
+      "description": "Honeymoon",
+      "amount": 0,
+      "paid": false,
+      "due": "2026-06-01",
+      "is_tip": false
+    }
+  ]
+}
