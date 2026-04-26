@@ -81,6 +81,26 @@ VENDORS = [
     {"name": "Danny Thomas", "type": "Tabletop Rental", "time": "10:00 AM (Pre-event)", "email": "", "phone": "(408) 747-1000", "note": "", "include_tip": False},
 ]
 
+SEATING_FILE = get_file('seating.json')
+
+def default_seating():
+    return {
+        "tables": [
+            {"id": 1, "number": 1, "capacity": 8, "shape": "rect", "x": 0, "y": 0},
+            {"id": 2, "number": 2, "capacity": 8, "shape": "rect", "x": 1, "y": 0},
+            {"id": 3, "number": 3, "capacity": 8, "shape": "rect", "x": 2, "y": 0},
+            {"id": 4, "number": 4, "capacity": 10, "shape": "rect", "x": 0, "y": 1},
+            {"id": 5, "number": 5, "capacity": 10, "shape": "rect", "x": 1, "y": 1},
+            {"id": 6, "number": 6, "capacity": 10, "shape": "rect", "x": 2, "y": 1},
+            {"id": 7, "number": 7, "capacity": 8, "shape": "round", "x": 0, "y": 2},
+            {"id": 8, "number": 8, "capacity": 8, "shape": "round", "x": 1, "y": 2},
+            {"id": 9, "number": 9, "capacity": 8, "shape": "round", "x": 2, "y": 2},
+        ],
+        "guests": []
+    }
+
+SEATING = load_json(SEATING_FILE, default_seating())
+
 def default_todos():
     return [
         {"id": 1, "task": "Final venue walkthrough", "archived": False, "done": False, "due": "2026-04-30"},
@@ -275,6 +295,90 @@ def update_budget_item(item_id):
             save_json(BUDGET_FILE, BUDGET)
             return jsonify(item)
     return jsonify({"error": "Not found"}), 404
+
+@app.route('/api/budget/items/<int:item_id>/payments', methods=['POST'])
+def add_budget_payment(item_id):
+    """Add a new payment installment to a budget item."""
+    for item in BUDGET['items']:
+        if item['id'] == item_id:
+            data = request.json
+            payment = {
+                'id': f'p{len(item["payments"]) + 1}',
+                'amount': data.get('amount', 0),
+                'paid': data.get('paid', False),
+                'due': data.get('due', '')
+            }
+            item['payments'].append(payment)
+            save_json(BUDGET_FILE, BUDGET)
+            return jsonify(payment), 201
+    return jsonify({"error": "Item not found"}), 404
+
+@app.route('/api/budget/items/<int:item_id>/payments/<payment_id>', methods=['PUT'])
+def update_budget_payment(item_id, payment_id):
+    """Update a specific payment installment."""
+    for item in BUDGET['items']:
+        if item['id'] == item_id:
+            for p in item['payments']:
+                if p['id'] == payment_id:
+                    p.update(request.json)
+                    save_json(BUDGET_FILE, BUDGET)
+                    return jsonify(p)
+            return jsonify({"error": "Payment not found"}), 404
+    return jsonify({"error": "Item not found"}), 404
+
+@app.route('/api/budget/items/<int:item_id>/payments/<payment_id>', methods=['DELETE'])
+def delete_budget_payment(item_id, payment_id):
+    """Delete a payment installment from a budget item."""
+    for item in BUDGET['items']:
+        if item['id'] == item_id:
+            item['payments'] = [p for p in item['payments'] if p['id'] != payment_id]
+            save_json(BUDGET_FILE, BUDGET)
+            return jsonify({"ok": True})
+    return jsonify({"error": "Item not found"}), 404
+
+# ─── SEATING ──────────────────────────────────────────────
+@app.route('/api/seating', methods=['GET'])
+def get_seating():
+    return jsonify(load_json(SEATING_FILE, default_seating()))
+
+@app.route('/api/seating', methods=['POST'])
+def update_seating():
+    global SEATING
+    SEATING = request.json
+    save_json(SEATING_FILE, SEATING)
+    return jsonify(SEATING)
+
+@app.route('/api/seating/guest', methods=['POST'])
+def add_seating_guest():
+    global SEATING
+    data = request.json
+    guest = {
+        "id": len(SEATING['guests']) + 1,
+        "name": data.get('name', ''),
+        "tableId": data.get('tableId', None),
+        "seat": data.get('seat', 0),
+        "diet": data.get('diet', ''),
+    }
+    SEATING['guests'].append(guest)
+    save_json(SEATING_FILE, SEATING)
+    return jsonify(guest), 201
+
+@app.route('/api/seating/guest/<int:guest_id>', methods=['PUT'])
+def update_seating_guest(guest_id):
+    global SEATING
+    for g in SEATING['guests']:
+        if g['id'] == guest_id:
+            g.update(request.json)
+            save_json(SEATING_FILE, SEATING)
+            return jsonify(g)
+    return jsonify({"error": "Not found"}), 404
+
+@app.route('/api/seating/guest/<int:guest_id>', methods=['DELETE'])
+def delete_seating_guest(guest_id):
+    global SEATING
+    SEATING['guests'] = [g for g in SEATING['guests'] if g['id'] != guest_id]
+    save_json(SEATING_FILE, SEATING)
+    return jsonify({"ok": True})
 
 # ─── LEGACY ROUTES (kept for compatibility) ──────────────
 @app.route('/api/guests', methods=['GET'])
